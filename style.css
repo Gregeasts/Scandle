@@ -1,0 +1,418 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap');
+
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Baloo 2', cursive, 'Comic Sans MS', cursive, sans-serif;
+  background-color: #ffe4ec; /* light pink */
+  color: #222;
+  height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Menu toggle button (hamburger) */
+#menu-toggle {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+  color: #222;
+  padding: 0.25rem 0.5rem;
+  user-select: none;
+}
+
+#menu-toggle i {
+  pointer-events: none;
+  font-size: 1.5rem;
+}
+
+/* Close button inside sidebar */
+.menu-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #222;
+  font-size: 1.5rem;
+  user-select: none;
+  z-index: 1101;
+}
+
+.menu-close-btn i {
+  pointer-events: none;
+}
+
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 320px;
+  background-color: #fff;
+  box-shadow: 3px 0 12px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: transform 0.3s ease;
+  z-index: 1050;
+  overflow-y: auto;
+  transform: translateX(-100%);
+}
+
+.sidebar:not(.hidden) {
+  transform: translateX(0);
+}
+
+/* Menu boxes stacked vertically with image left, text right */
+.menu-box {
+  display: flex;
+  align-items: center; /* vertically center image and text */
+  background-color: #fde2ff; /* fallback */
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 18px rgba(233, 30, 99, 0.25);
+  text-decoration: none;
+  transition: background-color 0.3s ease, filter 0.3s ease;
+  user-select: none;
+  color: inherit;
+}
+
+.menu-box:hover {
+  filter: brightness(1.1);
+}
+
+/* Image on left */
+.menu-box img {
+  width: 80px;
+  height: 80px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+/* Text container takes remaining space, text vertically centered */
+.text-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical center */
+  text-align: left;
+}
+h2 {
+    margin: 0;
+    font-size: 2.4rem;
+    line-height: 1;
+    color: #7b1fa2;
+    text-shadow:
+      -3px -3px 0 #fff,
+      3px -3px 0 #fff,
+      -3px 3px 0 #fff,
+      3px 3px 0 #fff;
+    font-family: 'Baloo 2', cursive, 'Comic Sans MS', cursive, sans-serif;
+    font-weight: 700;
+}
+  
+
+/* Main headers bubbly */
+.text-content h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #7b1fa2;
+  text-shadow:
+    -1px -1px 0 #fff,
+    1px -1px 0 #fff,
+    -1px 1px 0 #fff,
+    1px 1px 0 #fff;
+  font-family: 'Baloo 2', cursive, 'Comic Sans MS', cursive, sans-serif;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Subtexts bubbly */
+.text-content p {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  color: #9c27b0;
+  text-align: center;
+  text-shadow:
+    -0.5px -0.5px 0 #fff,
+    0.5px -0.5px 0 #fff,
+    -0.5px 0.5px 0 #fff,
+    0.5px 0.5px 0 #fff;
+  font-family: 'Baloo 2', cursive, 'Comic Sans MS', cursive, sans-serif;
+  font-weight: 700;
+}
+
+/* Different background colors and shadows for each box */
+.menu-box:nth-child(2) { /* Because first child is close button */
+  background-color: #fde2ff; /* light pink */
+  color: #6a1b9a;
+  box-shadow: 0 6px 18px rgba(233, 30, 99, 0.3);
+}
+
+.menu-box:nth-child(3) {
+  background-color: #e0d7f5; /* light lavender */
+  color: #4a148c;
+  box-shadow: 0 6px 18px rgba(74, 20, 140, 0.3);
+}
+
+.menu-box:nth-child(4) {
+  background-color: #d0e1ff; /* light blue */
+  color: #0d47a1;
+  box-shadow: 0 6px 18px rgba(13, 71, 161, 0.3);
+}
+
+.menu-box:nth-child(5) {
+  background-color: #f9e5ff; /* pale purple-pink */
+  color: #7b1fa2;
+  box-shadow: 0 6px 18px rgba(123, 31, 162, 0.3);
+}
+
+/* Archive and How to Play buttons styled like menu boxes but text centered */
+.menu-extra {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  background-color: #9c27b0;
+  color: white;
+  font-weight: 700;
+  padding: 0 1rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  font-size: 2rem;
+  font-family: 'Baloo 2', cursive, 'Comic Sans MS', cursive, sans-serif;
+  text-shadow:
+    -3px -3px 0 #000,
+    3px -3px 0 #000,
+    -3px 3px 0 #000,
+    3px 3px 0 #000;
+  text-align: center;
+}
+
+.menu-extra:hover {
+  background-color: #7b1fa2;
+}
+
+/* Main game window */
+#game-window,#Title {
+  flex-grow: 1;
+  padding: 0.5rem 0.5rem;
+  width: 100%;
+  margin-left: 0; /* No shift */
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+/* Main game window title bubbly */
+#game-window h1, #Title h1 {
+  font-size: 3rem;
+  color: #7b1fa2;
+  text-shadow:
+    -3px -3px 0 #fff,
+    3px -3px 0 #fff,
+    -3px 3px 0 #fff,
+    3px 3px 0 #fff;
+  font-family: 'Baloo 2', cursive, 'Comic Sans MS', cursive, sans-serif;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+/* Main game window paragraph bubbly */
+#game-window p, #Title p {
+  font-size: 1.5rem;
+  color: #9c27b0;
+  font-family: 'Baloo 2', cursive, 'Comic Sans MS', cursive, sans-serif;
+  font-weight: 700;
+  text-shadow:
+    -2px -2px 0 #fff,
+    2px -2px 0 #fff,
+    -2px 2px 0 #fff,
+    2px 2px 0 #fff;
+}
+/* Wordle Grid Styling */
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 0rem;
+  }
+  
+  .wordle-row {
+    display: flex;
+    gap: 0.45rem;
+  }
+  
+  .wordle-box {
+    width: 70px;
+    height: 70px;
+    background-color: #fff;
+    border: 3px solid #ccc;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 70px;
+    font-family: 'Baloo 2', cursive;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .wordle-box.correct {
+    background-color: #6aaa64; /* green */
+    border-color: #6aaa64;
+    color: white;
+  }
+  .wordle-box.present {
+    background-color: #c9b458; /* yellow */
+    border-color: #c9b458;
+    color: white;
+  }
+  .wordle-box.absent {
+    background-color: #787c7e; /* gray */
+    border-color: #787c7e;
+    color: white;
+  }
+  .wordle-box {
+    transition: transform 0.6s ease, background-color 0.6s ease;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+  
+  .wordle-box.flip {
+    animation: flip 0.6s ease forwards;
+  }
+  
+  @keyframes flip {
+    0% {
+      transform: rotateX(0deg);
+    }
+    50% {
+      transform: rotateX(90deg);
+    }
+    100% {
+      transform: rotateX(0deg);
+    }
+  }
+  
+  
+  /* Invalid popup */
+  #invalid-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff4d4f;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    display: none;
+    z-index: 1000;
+    animation: fadeOut 2s forwards;
+  }
+  
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+  }
+  
+/* Modal Styling */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal.hidden {
+    display: none;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    font-family: 'Comic Sans MS', 'Bubblegum Sans', cursive;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  }
+  
+  .modal-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .modal-content button {
+    margin: 0.5rem;
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #ff69b4;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .close-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.8rem;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  #share-trigger {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: #ff69b4;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 1rem;
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  
+  
+/* Responsive adjustments */
+@media (max-width: 400px) {
+  .sidebar {
+    width: 260px;
+  }
+}

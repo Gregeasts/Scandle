@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wordle Daily</title>
+  <!-- Font Awesome CDN -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Menu toggle button (hamburger) -->
+  <button id="menu-toggle" aria-label="Open menu">
+    <i class="fas fa-bars fa-lg"></i>
+  </button>
+
+  <!-- Sidebar menu -->
+  <nav id="sidebar" class="sidebar hidden">
+    <!-- Close button top-right -->
+    <h2>MENU</h2>
+    <button id="menu-close" aria-label="Close menu" class="menu-close-btn">
+      <i class="fas fa-times fa-lg"></i>
+    </button>
+    <a href="daily.html" class="menu-box">
+      <img src="bolt-svgrepo-com.svg" alt="Daily" />
+      <div class="text-content">
+        <h2>Daily</h2>
+        <p>The main, puzzly puzzle!</p>
+      </div>
+    </a>
+    
+    <a href="mini.html" class="menu-box">
+      <img src="https://via.placeholder.com/80?text=Mini" alt="Mini mode" />
+      <div class="text-content">
+        <h2>Mini</h2>
+        <p>Smaller puzzles, faster rounds</p>
+      </div>
+    </a>
+    <a href="group.html" class="menu-box">
+      <img src="https://via.placeholder.com/80?text=Group" alt="Group mode" />
+      <div class="text-content">
+        <h2>Group</h2>
+        <p>Play with friends or teams</p>
+      </div>
+    </a>
+    <a href="find.html" class="menu-box">
+      <img src="https://via.placeholder.com/80?text=Find" alt="Find mode" />
+      <div class="text-content">
+        <h2>Find</h2>
+        <p>Search for hidden words</p>
+      </div>
+    </a>
+    <a href="archive.html" class="menu-extra">Archive</a>
+    <a href="howto.html" class="menu-extra">How to Play</a>
+  </nav>
+
+  <!-- Main game window placeholder -->
+  <main id="Title">
+    <h1>Daily Game</h1>
+  </main>
+  <main id="game-window">
+    <div id="invalid-popup">Invalid word</div>
+    <div id="wordle-grid" class="grid-container"></div>
+
+
+  </main>
+  <div id="results-modal" class="modal hidden">
+    <div class="modal-content">
+      <button id="close-modal" class="close-button">&times;</button>
+      <h2>Game Over!</h2>
+      <pre id="results-text"></pre>
+      <button onclick="copyResults()">Share</button>
+    </div>
+  </div>
+  
+  <!-- Share Results Trigger Button -->
+  <button id="share-trigger" class="hidden" onclick="openResults()">📊 Share Results</button>
+
+
+  <script src="script.js"></script>
+</body>
+
+</html>
