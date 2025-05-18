@@ -15,7 +15,42 @@ body {
   display: flex;
   flex-direction: column;
 }
-
+.on-screen-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .key-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+  
+  .key {
+    background-color: #d3d6da;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    flex: 1;
+    max-width: 45px;
+    text-align: center;
+  }
+  
+  .key[data-key="ENTER"],
+  .key[data-key="BACK"] {
+    max-width: 80px;
+    flex: 1.5;
+  }
+  
 /* Menu toggle button (hamburger) */
 #menu-toggle {
   position: fixed;
@@ -214,7 +249,7 @@ h2 {
 /* Main game window */
 #game-window,#Title {
   flex-grow: 1;
-  padding: 0.5rem 0.5rem;
+  
   width: 100%;
   margin-left: 0; /* No shift */
   position: relative;
@@ -224,13 +259,13 @@ h2 {
 
 /* Main game window title bubbly */
 #game-window h1, #Title h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   color: #7b1fa2;
   text-shadow:
-    -3px -3px 0 #fff,
-    3px -3px 0 #fff,
-    -3px 3px 0 #fff,
-    3px 3px 0 #fff;
+    -2px -2px 0 #fff,
+    2px -2px 0 #fff,
+    -2px 2px 0 #fff,
+    2px 2px 0 #fff;
   font-family: 'Baloo 2', cursive, 'Comic Sans MS', cursive, sans-serif;
   margin-top: 0.2rem;
   margin-bottom: 0.2rem;
@@ -264,15 +299,15 @@ h2 {
   }
   
   .wordle-box {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     background-color: #fff;
     border: 3px solid #ccc;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
     text-transform: uppercase;
     text-align: center;
-    line-height: 70px;
+    line-height: 60px;
     font-family: 'Baloo 2', cursive;
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);

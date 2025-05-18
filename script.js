@@ -186,7 +186,26 @@ document.addEventListener('keydown', (e) => {
     
   }
 });
+function checkNewDay() {
+    const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
+    const lastDate = memory?.daily?.date;
+    const todayStr = new Date().toISOString().split('T')[0];
+  
+    if (lastDate !== todayStr) {
+      console.log('New day detected, resetting daily game state.');
+      if (!memory.daily) memory.daily = {};
+      memory.daily = {
+        date: todayStr,
+        guesses: Array.from({ length: 8 }, () => Array(5).fill('')),
+        complete: false,
+        results: null,
+      };
+      localStorage.setItem('wordleMemory', JSON.stringify(memory));
+    }
+}
+  
 function saveProgress() {
+    const todayStr = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
     const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
     const savedGrid = memory.daily?.guesses || Array.from({ length: 8 }, () => Array(5).fill(''));
   
@@ -194,6 +213,7 @@ function saveProgress() {
   
     memory.daily = {
       ...memory.daily,
+      date: todayStr,
       guesses: savedGrid,
       complete: gameOver
     };
@@ -201,7 +221,7 @@ function saveProgress() {
     localStorage.setItem('wordleMemory', JSON.stringify(memory));
   }
   
-  
+
 function showResults(win) {
     const resultText = generateResultsText(win);
     document.getElementById('share-trigger').style.display = 'block';
@@ -339,15 +359,46 @@ function showResults(win) {
       }
     }
   }
+
+  const keyLayout = [
+    ['Q','W','E','R','T','Y','U','I','O','P'],
+    ['A','S','D','F','G','H','J','K','L'],
+    ['ENTER','Z','X','C','V','B','N','M','BACK']
+  ];
+  
+  function createKeyboard() {
+    const keyboard = document.getElementById('keyboard');
+    keyLayout.forEach((rowKeys, rowIndex) => {
+      const row = document.getElementById(`row-${rowIndex + 1}`);
+      row.innerHTML = '';
+      rowKeys.forEach(key => {
+        const keyButton = document.createElement('button');
+        keyButton.textContent = key === 'BACK' ? '⌫' : key;
+        keyButton.className = 'key';
+        keyButton.dataset.key = key;
+        keyButton.addEventListener('click', () => handleKeyInput(key));
+        row.appendChild(keyButton);
+      });
+    });
+  }
+  
+  function handleKeyInput(key) {
+    const simulatedEvent = new KeyboardEvent('keydown', {
+      key: key === 'BACK' ? 'Backspace' : key === 'ENTER' ? 'Enter' : key
+    });
+    document.dispatchEvent(simulatedEvent);
+  }
+  
   
 document.getElementById('close-modal').addEventListener('click', closeResults);
 document.getElementById('share-trigger').style.display = 'none'; 
 // Start the game
 window.onload = async () => {
-    
+    checkNewDay();
     await loadTodayAnswer();
     restoreGuesses();
     restoreResultsIfNeeded();
+    createKeyboard(); 
     
     
 };
