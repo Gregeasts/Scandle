@@ -139,32 +139,33 @@ async function createRandomAnswer() {
   const mode = urlParams.get('mode');
   
   const todayStr = new Date().toISOString().split('T')[0];
-  if (mode !== memory?.mode?.current_mode){
-    memory.mode = {
-      date: todayStr,
-      guesses: Array.from({ length: 8 }, () => Array(5).fill('')),
-      complete: false,
-      results: null,
-      current_mode:mode,
-      answer: null,
-      rowlabels:[],
-    };
-    localStorage.setItem('wordleMemory', JSON.stringify(memory));
+    if (mode !== memory?.mode?.current_mode){
+      memory.mode = {
+        date: todayStr,
+        guesses: Array.from({ length: 8 }, () => Array(5).fill('')),
+        complete: false,
+        results: null,
+        current_mode:mode,
+        answer: null,
+        rowlabels:[],
+      };
+      localStorage.setItem('wordleMemory', JSON.stringify(memory));
+      
 
-  }
-  if(!memory?.mode?.answer && memory?.mode?.answer===null){
-    await loadValidWords(); // Make sure answerWords is populated
-
-    
-    if (Array.isArray(answerWords) && answerWords.length > 0) {
-      const randomIndex = Math.floor(Math.random() * answerWords.length);
-      const answer = answerWords[randomIndex];
-
-      createWordleGridRandom(answer);
-    } else {
-      document.getElementById('game-window').innerHTML = `<h2>Random Puzzle Generation Failed</h2>`;
     }
-  }else{
+    if( memory?.mode?.answer===null){
+      await loadValidWords(); // Make sure answerWords is populated
+
+      
+      if (Array.isArray(answerWords) && answerWords.length > 0) {
+        const randomIndex = Math.floor(Math.random() * answerWords.length);
+        const answer = answerWords[randomIndex];
+
+        createWordleGridRandom(answer);
+      } else {
+        document.getElementById('game-window').innerHTML = `<h2>Random Puzzle Generation Failed</h2>`;
+      }
+    }else{
     if (memory?.mode?.answer!==null){
       await loadValidWords();
       answer=memory?.mode?.answer;
@@ -879,6 +880,7 @@ function saveProgress() {
       results: null,
       current_mode:mode,
       answer: null,
+      rowlabels:[],
     };
     localStorage.setItem('wordleMemory', JSON.stringify(memory));
     location.reload()
@@ -1016,7 +1018,7 @@ function saveProgress() {
       liesList = memory?.mode?.liesList ||[];
       
       
-      
+      console.log(storedGuesses);
     
       if (storedGuesses && Array.isArray(storedGuesses)) {
         guessGrid = storedGuesses;
@@ -1024,13 +1026,18 @@ function saveProgress() {
       
         storedGuesses.forEach((guessArr, rowIndex) => {
           const guess = guessArr.join('');
- 
+          console.log(guessArr);
+          
           const result = evaluateGuess(guess,rowIndex); // Use your custom evaluation logic
-
+          
           guessArr.forEach((letter, colIndex) => {
+            console.log(letter,colIndex)
             const cell = document.getElementById(`box-${rowIndex}-${colIndex}`);
-   
-            cell.textContent = letter;
+            
+            if (!guessArr.every(char => char === "")){
+              cell.textContent = letter;
+            }
+           
     
             if (letter && result[colIndex]) {
               cell.classList.add(result[colIndex]); // 'correct', 'present', or 'absent'
@@ -1042,6 +1049,7 @@ function saveProgress() {
     
         currentRow = storedGuesses.findIndex(row => row.join('') === '');
         if (currentRow === -1) currentRow = 8;
+        console.log(currentRow);
         currentCol = 0;
     
         if (complete) {
