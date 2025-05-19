@@ -75,7 +75,7 @@ document.querySelectorAll('.menu-box').forEach(link => {
 
     // Optional: do something when mode is cleared or changed
 
-    console.log("Mode set to:", mode || "default");
+
     location.reload();
     
   });
@@ -200,7 +200,7 @@ async function loadValidWords() {
   answerWords = lines.slice(1) // skip header
     .map(line => line.split(',')[wordsIdx1]?.trim().toUpperCase())
     .filter(word => word); // remove empty or undefined
-  console.log(answerWords);
+
 }
 
 // Show "Invalid word" popup
@@ -316,8 +316,8 @@ function createWordleGridRandom(answer) {
   const mode = params.get('mode'); // will be null if not present
   answerWord = answer.toUpperCase();
   const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
-  console.log(memory?.mode?.rowlabels); 
-  if (memory?.mode?.rowlabels.length <1){
+  
+  if (memory?.mode?.rowlabels && memory?.mode?.rowlabels.length <1){
 
   
     if (mode==='Snake'){
@@ -404,13 +404,13 @@ function createWordleGridRandom(answer) {
   const gridContainer = document.getElementById('wordle-grid');
   gridContainer.innerHTML = '';
   answerWord = answer.toUpperCase();
-  console.log(answerWord);
+  
   guessGrid = Array.from({ length: 8 }, () => Array(5).fill(''));
 
   for (let r = 0; r < 8; r++) {
 
     const method = rowLabels[r];
-    console.log(rowLabels);
+    
     let blocks = [];
     let blocks1 = [];
     let blocks2=[];
@@ -498,7 +498,7 @@ function createWordleGridRandom(answer) {
 
 // Evaluate guess result (green/yellow/gray)
 function evaluateGuess(guess,currentRow) {
-    console.log(answerWord);
+  
     const answerArr = answerWord.split('');
     const guessArr = guess.split('');
     if (guessArr.length<1){
@@ -535,7 +535,7 @@ function evaluateGuess(guess,currentRow) {
             // mark as 'absent'
           if (tolie && i ===lie-1){
             if (!liesList.some(entry => entry.charAt(0) === String(currentRow))) {
-                console.log("here",liesList,currentRow)
+                
                 lied = Math.floor(Math.random() * 2) + 1;
                 if (lied===1){
                     result[i] = 'correct';
@@ -664,7 +664,7 @@ document.addEventListener('keydown', (e) => {
         if (guess.split("")[mustuseL-1]!==mustuse){
 
             showInvalidPopup();
-            console.log("1")
+         
             return;
         }
     }
@@ -673,7 +673,7 @@ document.addEventListener('keydown', (e) => {
         if (!(guess.split("")[0]===lastletter)){
 
             showInvalidPopup();
-            console.log("2")
+            
             return;
         }
     }
@@ -687,7 +687,7 @@ document.addEventListener('keydown', (e) => {
       
             if (guess.charAt(posA) !== guess.charAt(posB)) {
               showInvalidPopup();
-              console.log("3")
+              
               return;
             }
           }
@@ -695,7 +695,7 @@ document.addEventListener('keydown', (e) => {
     }
     if ((!validWords.includes(guess))) {
       showInvalidPopup();
-      console.log("4")
+      
       return;
     }
 
@@ -847,13 +847,13 @@ function saveProgress() {
     }
     
     
-    console.log(currentRow);
+ 
     if (currentRow ===8){
       currentRow-=2;
     }
     for (let r = 0; r < currentRow+1; r++) {
       const guess = guessGrid[r].join('');
-      console.log(guess,currentRow);
+
       const evaluation = evaluateGuess(guess,r);
   
       const resultRow = evaluation.map(status => {
@@ -1020,18 +1020,16 @@ function saveProgress() {
     
       if (storedGuesses && Array.isArray(storedGuesses)) {
         guessGrid = storedGuesses;
-        console.log("here");
-        
+     
       
         storedGuesses.forEach((guessArr, rowIndex) => {
           const guess = guessArr.join('');
-          console.log(guess)
-          console.log(rowIndex);
+ 
           const result = evaluateGuess(guess,rowIndex); // Use your custom evaluation logic
-          console.log(result);
+
           guessArr.forEach((letter, colIndex) => {
             const cell = document.getElementById(`box-${rowIndex}-${colIndex}`);
-            console.log("I am definitely here",cell)
+   
             cell.textContent = letter;
     
             if (letter && result[colIndex]) {
@@ -1119,7 +1117,7 @@ window.onload = async () => {
     await createRandomAnswer();
     restoreGuesses();
     createKeyboard();
-    console.log("done");
+
   }
 
     
