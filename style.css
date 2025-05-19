@@ -24,6 +24,9 @@ body {
     margin-left: auto;
     margin-right: auto;
   }
+  .svg-box {
+    margin-left: 10px;
+  }
   
   .key-row {
     display: flex;
@@ -71,7 +74,7 @@ body {
 }
 
 /* Close button inside sidebar */
-.menu-close-btn {
+.menu-close-btn,.extra-close-btn {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -84,7 +87,7 @@ body {
   z-index: 1101;
 }
 
-.menu-close-btn i {
+.menu-close-btn i,.extra-close-btn i {
   pointer-events: none;
 }
 
@@ -122,6 +125,7 @@ body {
   text-decoration: none;
   transition: background-color 0.3s ease, filter 0.3s ease;
   user-select: none;
+  gap:0.5;
   color: inherit;
 }
 
@@ -374,6 +378,20 @@ h2 {
   }
   
 /* Modal Styling */
+#main-sidebar-content.hidden{
+    display: none;
+}
+#main-sidebar-content{
+    gap: 10px;
+    display: contents;
+}
+.extra-window {
+    display: contents;
+}
+  
+.extra-window.hidden{
+    display: none;
+}
 .modal {
     position: fixed;
     top: 0;

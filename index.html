@@ -21,41 +21,98 @@
   <!-- Sidebar menu -->
   <nav id="sidebar" class="sidebar hidden">
     <!-- Close button top-right -->
-    <h2>MENU</h2>
-    <button id="menu-close" aria-label="Close menu" class="menu-close-btn">
-      <i class="fas fa-times fa-lg"></i>
-    </button>
-    <a href="index.html" class="menu-box">
-      <img src="bolt-svgrepo-com.svg" alt="Daily" />
-      <div class="text-content">
-        <h2>Daily Scandle</h2>
-        <p>The main, puzzly puzzle!</p>
-      </div>
-    </a>
     
-    <a href="mini.html" class="menu-box">
-      <img src="https://via.placeholder.com/80?text=Mini" alt="Mini mode" />
-      <div class="text-content">
-        <h2>Mini</h2>
-        <p>Smaller puzzles, faster rounds</p>
+
+    <div id="main-sidebar-content">
+      <h2>MODES</h2>
+      <button id="menu-close" aria-label="Close menu" class="menu-close-btn">
+        <i class="fas fa-times fa-lg"></i>
+      </button>
+      <a href="index.html" class="menu-box">
+        <img src="bolt-svgrepo-com.svg" alt="Daily" />
+        <div class="text-content">
+          <h2>Daily Scandle</h2>
+          <p>The main, puzzly puzzle!</p>
+        </div>
+      </a>
+      
+      <a href="mini.html" class="menu-box">
+        <img src="https://via.placeholder.com/80?text=Mini" alt="Mini mode" />
+        <div class="text-content">
+          <h2>Mini</h2>
+          <p>Smaller puzzles, faster rounds</p>
+        </div>
+      </a>
+      <a href="group.html" class="menu-box">
+        <img src="https://via.placeholder.com/80?text=Group" alt="Group mode" />
+        <div class="text-content">
+          <h2>Group</h2>
+          <p>Play with friends or teams</p>
+        </div>
+      </a>
+      <a href="find.html" class="menu-box">
+        <img src="https://via.placeholder.com/80?text=Find" alt="Find mode" />
+        <div class="text-content">
+          <h2>Find</h2>
+          <p>Search for hidden words</p>
+        </div>
+      </a>
+      <a href="archive.html" class="menu-extra">Archive</a>
+      <button id="open-extra" class="menu-extra" type="button">How to Play</button>
+
+    </div>
+    <div id="extra-window" class="extra-window hidden">
+      <h2>HOW TO PLAY</h2>
+      <button id="extra-close" class="extra-close-btn">
+        <i class="fas fa-times fa-lg"></i>
+      </button>
+      <p>Scandle is a wordle variant where each row has a different rule. Rules are identified on the right of each row and are shown below.</p>
+      <div class="menu-box">
+        <img src="normal.svg" alt="Daily" />
+        <div class="text-content">
+          <h2>Normal</h2>
+          <p>A normal Wordle Puzzle row</p>
+        </div>
       </div>
-    </a>
-    <a href="group.html" class="menu-box">
-      <img src="https://via.placeholder.com/80?text=Group" alt="Group mode" />
-      <div class="text-content">
-        <h2>Group</h2>
-        <p>Play with friends or teams</p>
+      
+      <div class="menu-box">
+        <img src="lie.svg" alt="Mini mode" />
+        <div class="text-content">
+          <h2>Lie</h2>
+          <p>One letter in a lie row is not showing its true colour!</p>
+        </div>
       </div>
-    </a>
-    <a href="find.html" class="menu-box">
-      <img src="https://via.placeholder.com/80?text=Find" alt="Find mode" />
-      <div class="text-content">
-        <h2>Find</h2>
-        <p>Search for hidden words</p>
+      <div  class="menu-box">
+        <img src="equal.svg" alt="Group mode" />
+        <div class="text-content">
+          <h2>Equal</h2>
+          <p>The letters within the highlighted boxes must be identical.</p>
+        </div>
       </div>
-    </a>
-    <a href="archive.html" class="menu-extra">Archive</a>
-    <a href="howto.html" class="menu-extra">How to Play</a>
+      <div class="menu-box">
+        <img src="end.svg" alt="Find mode" />
+        <div class="text-content">
+          <h2>End</h2>
+          <p>The word must begin with the last letter of the previous word!</p>
+        </div>
+      </div>
+      <div class="menu-box">
+        <img src="block.svg" alt="Find mode" />
+        <div class="text-content">
+          <h2>Block</h2>
+          <p>Boxes covered black in this row will not reveal their shade.</p>
+        </div>
+      </div>
+      <div class="menu-box">
+        <img src="d.svg" alt="Find mode" />
+        <div class="text-content">
+          <h2>Letters</h2>
+          <p>The word must contain the letter in the highlighted box!</p>
+        </div>
+      </div>
+
+
+    </div>
   </nav>
 
   <!-- Main game window placeholder -->
