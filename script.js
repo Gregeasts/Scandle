@@ -12,6 +12,7 @@ let row7= "";
 let row8= "";
 let lastletter ='';
 let liesList=[];
+let result =[];
 
 let tolie=false;
 let lied=0;
