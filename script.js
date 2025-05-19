@@ -228,8 +228,8 @@ function evaluateGuess(guess,currentRow) {
     const answerArr = answerWord.split('');
     const guessArr = guess.split('');
     if (guessArr.length<1){
-        result = ['absent','absent','absent','absent','absent'];
-        return;
+        const result1 = ['absent','absent','absent','absent','absent'];
+        return result1;
     }
     const result = Array(5).fill('absent');
     const rowLabels = [row1, row2, row3, row4, row5, row6, row7, row8];
