@@ -651,11 +651,14 @@ document.getElementById('close-modal').addEventListener('click', closeResults);
 document.getElementById('share-trigger').style.display = 'none'; 
 // Start the game
 window.onload = async () => {
+     
     checkNewDay();
     await loadTodayAnswer();
     restoreGuesses();
+    createKeyboard();
     restoreResultsIfNeeded();
-    createKeyboard(); 
+
+    
     
     
     
