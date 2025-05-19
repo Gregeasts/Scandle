@@ -28,7 +28,7 @@
       <button id="menu-close" aria-label="Close menu" class="menu-close-btn">
         <i class="fas fa-times fa-lg"></i>
       </button>
-      <a href="index.html" class="menu-box">
+      <a href="index.html" class="menu-box" data-mode="">
         <img src="bolt-svgrepo-com.svg" alt="Daily" />
         <div class="text-content">
           <h2>Daily Scandle</h2>
@@ -36,27 +36,45 @@
         </div>
       </a>
       
-      <a href="mini.html" class="menu-box">
-        <img src="https://via.placeholder.com/80?text=Mini" alt="Mini mode" />
+      <a href="#" class="menu-box" data-mode="Walls">
+        <img src="block.svg" alt="Mini mode" />
         <div class="text-content">
-          <h2>Mini</h2>
-          <p>Smaller puzzles, faster rounds</p>
+          <h2>Walls</h2>
+          <p>Beseek thy letters through impenetrable barriers!</p>
         </div>
       </a>
-      <a href="group.html" class="menu-box">
-        <img src="https://via.placeholder.com/80?text=Group" alt="Group mode" />
+      
+      <a href="#" class="menu-box" data-mode="Snake">
+        <img src="end.svg" alt="Group mode" />
         <div class="text-content">
-          <h2>Group</h2>
-          <p>Play with friends or teams</p>
+          <h2>Snake</h2>
+          <p>Slippery, sloppery, snaking through wordle-opoly!</p>
         </div>
       </a>
-      <a href="find.html" class="menu-box">
-        <img src="https://via.placeholder.com/80?text=Find" alt="Find mode" />
+      
+      <a href="#" class="menu-box" data-mode="Lies">
+        <img src="lie.svg" alt="Find mode" />
         <div class="text-content">
-          <h2>Find</h2>
-          <p>Search for hidden words</p>
+          <h2>Lies</h2>
+          <p>Wise Sherlock, seek the clues hidden within!</p>
         </div>
       </a>
+
+      <a href="#" class="menu-box" data-mode="Equals">
+        <img src="equal.svg" alt="Find mode" />
+        <div class="text-content">
+          <h2>Equals</h2>
+          <p>This puzzle comes in pairs...</p>
+        </div>
+      </a>
+      <a href="#" class="menu-box" data-mode="Must-Use">
+        <img src="d.svg" alt="Mini mode" />
+        <div class="text-content">
+          <h2>Must Use</h2>
+          <p>I enforce upon you... <b>letters!</b></p>
+        </div>
+      </a>
+      
       <a href="archive.html" class="menu-extra">Archive</a>
       <button id="open-extra" class="menu-extra" type="button">How to Play</button>
 
@@ -117,7 +135,8 @@
 
   <!-- Main game window placeholder -->
   <main id="Title">
-    <h1>Daily Scandle</h1>
+    <h1 id="game-title">Daily Scandle</h1>
+
   </main>
   <main id="game-window">
     <div id="invalid-popup">Invalid word</div>
@@ -137,6 +156,7 @@
       <h2>Game Over!</h2>
       <pre id="results-text"></pre>
       <button onclick="copyResults()">Share</button>
+      <button id="try-again-btn" class="try-again hidden" onclick="restartGame()">Try Again</button>
     </div>
   </div>
   
