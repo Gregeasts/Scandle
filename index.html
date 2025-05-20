@@ -11,6 +11,8 @@
   />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  
 </head>
 <body>
   <!-- Menu toggle button (hamburger) -->
@@ -75,7 +77,7 @@
         </div>
       </a>
       
-      <a href="archive.html" class="menu-extra">Archive</a>
+      <button id="open-extra-1" class="menu-extra" type="button">Archive</button>
       <button id="open-extra" class="menu-extra" type="button">How to Play</button>
 
     </div>
@@ -131,6 +133,19 @@
 
 
     </div>
+    <div id="extra-window-1" class="extra-window-1 hidden">
+      <h2>Archive</h2>
+      <button id="extra-close-1" class="extra-close-btn-1">
+        <i class="fas fa-times fa-lg"></i>
+      </button>
+      <div id="calendar" class="calendar"></div>
+
+
+
+    </div>
+    
+    
+
   </nav>
 
   <!-- Main game window placeholder -->
@@ -165,6 +180,7 @@
 
 
   <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 </body>
 
 </html>

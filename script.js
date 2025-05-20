@@ -22,6 +22,55 @@ let regener =false;
 function disableInput() {
   gameOver = true;
 }
+let calendar;
+document.addEventListener('DOMContentLoaded', function () {
+  const calendarEl = document.getElementById('calendar');
+
+  calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: ''
+    },
+    dateClick: function (info) {
+      const clickedDate = new Date(info.dateStr);
+      const today = new Date();
+    
+      // Normalize both dates (set time to 00:00:00)
+      clickedDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+    
+      if (clickedDate > today) {
+        alert("Date is in the future");
+        return;
+      }
+    
+      if (clickedDate.getTime() === today.getTime()) {
+        // Do nothing for today
+        return;
+      }
+    
+      // Format date as DD/MM/YYYY
+      const day = String(clickedDate.getDate()).padStart(2, '0');
+      const month = String(clickedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+      const year = clickedDate.getFullYear();
+    
+      const formattedDate = `${day}/${month}/${year}`;
+    
+      // Build URL with formatted date
+      const baseUrl = window.location.origin + window.location.pathname;
+      const newUrl = `${baseUrl}?date=${encodeURIComponent(formattedDate)}`;
+    
+      window.location.href = newUrl;
+    }
+    
+    
+  });
+
+  calendar.render();
+  
+});
 
 function showTryAgain(show = true) {
   const btn = document.getElementById('try-again-btn');
@@ -29,6 +78,7 @@ function showTryAgain(show = true) {
     btn.classList.toggle('hidden', !show);
   }
 }
+
 
 menuToggle.addEventListener('click', () => {
   sidebar.classList.remove('hidden');
@@ -42,18 +92,32 @@ menuClose.addEventListener('click', () => {
   menuToggle.style.display = 'block'; // show hamburger
 });
 const openExtraBtn = document.getElementById('open-extra');
+const openExtraBtn1 = document.getElementById('open-extra-1');
 const closeExtraBtn = document.getElementById('extra-close');
+const closeExtraBtn1 = document.getElementById('extra-close-1');
 const mainContent = document.getElementById('main-sidebar-content');
 const extraWindow = document.getElementById('extra-window');
+const extraWindow1 = document.getElementById('extra-window-1');
 
 openExtraBtn.addEventListener('click', () => {
     mainContent.classList.add('hidden');
     extraWindow.classList.remove('hidden');
+
+});
+openExtraBtn1.addEventListener('click', () => {
+  mainContent.classList.add('hidden');
+  extraWindow1.classList.remove('hidden');
+  calendar.render();
+  calendar.updateSize();
 });
 
 closeExtraBtn.addEventListener('click', () => {
     extraWindow.classList.add('hidden');
     mainContent.classList.remove('hidden');
+});
+closeExtraBtn1.addEventListener('click', () => {
+  extraWindow1.classList.add('hidden');
+  mainContent.classList.remove('hidden');
 });
 
 // Initialize close button hidden on load
@@ -63,12 +127,27 @@ document.querySelectorAll('.menu-box').forEach(link => {
     event.preventDefault(); // stop the default link behavior
 
     const mode = link.getAttribute('data-mode');
+    const date = link.getAttribute('data-date');
     const newUrl = new URL(window.location.href);
 
     if (mode) {
+      // Set mode, remove date
       newUrl.searchParams.set('mode', mode);
+      newUrl.searchParams.delete('date');
+
+    } else if (date) {
+      // Set date, remove mode
+      newUrl.searchParams.set('date', date);
+      newUrl.searchParams.delete('mode');
+
     } else {
-      newUrl.searchParams.delete('mode'); // ✅ Remove mode
+      // Remove both if neither mode nor date present
+      newUrl.searchParams.delete('mode');
+      newUrl.searchParams.delete('date');
+
+      if (menuClose) {
+        menuClose.style.display = 'none';
+      }
     }
 
     window.history.pushState({}, '', newUrl);
@@ -107,9 +186,14 @@ async function loadTodayAnswer() {
   const row6Idx = headers.indexOf('Row6');
   const row7Idx = headers.indexOf('Row7');
   const row8Idx = headers.indexOf('Row8');
-
-  const today = new Date();
-  const todayStr = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+  const urlParams = new URLSearchParams(window.location.search);
+  let todayStr='';
+  const date = urlParams.get('date');
+  if(!date){
+    const today = new Date();
+    todayStr = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+  }else{todayStr = date}
+  
 
   const dataRows = rows.slice(1);
   const todayRow = dataRows.find(row => row[dateIdx] === todayStr);
@@ -129,7 +213,7 @@ async function loadTodayAnswer() {
     
     createWordleGrid(answer);
   } else {
-    document.getElementById('game-window').innerHTML = `<h2>No puzzle found for today (${todayStr})</h2>`;
+    document.getElementById('game-window').innerHTML = `<h2>No puzzle found for (${todayStr})</h2>`;
   }
 }
 async function createRandomAnswer() {
@@ -509,6 +593,7 @@ function evaluateGuess(guess,currentRow) {
     const result = Array(5).fill('absent');
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
+    const date = urlParams.get('date');
   
     if (!mode) {
       rowLabels = [row1, row2, row3, row4, row5, row6, row7, row8];
@@ -765,11 +850,39 @@ function checkNewDay() {
       localStorage.setItem('wordleMemory', JSON.stringify(memory));
     }
 }
+function checkNewDay1() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const dateKey = urlParams.get('date');  // e.g. "17/05/2025"
+  if (!dateKey) return; // no date param, exit early
+
+  const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
+
+  const todayStr = new Date().toISOString().split('T')[0]; // e.g. "2025-05-19"
+
+  // Get stored current_date for this dateKey if exists
+  const lastDate = memory[dateKey]?.current_date || null;
+
+  if (lastDate !== todayStr) {
+    console.log('New day detected, resetting daily game state for', dateKey);
+
+    memory[dateKey] = {
+      arch_date: dateKey,
+      current_date: todayStr,
+      guesses: Array.from({ length: 8 }, () => Array(5).fill('')),
+      complete: false,
+      results: null,
+    };
+
+    localStorage.setItem('wordleMemory', JSON.stringify(memory));
+  }
+}
+
   
 function saveProgress() {
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
-    if (!mode){
+    const date = urlParams.get('date');
+    if (!mode && !date){
 
     
       const todayStr = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
@@ -820,6 +933,35 @@ function saveProgress() {
       localStorage.setItem('wordleMemory', JSON.stringify(memory));
 
     }
+    else if (date){
+      const todayStr = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+      const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
+      const savedGrid = memory[date]?.guesses || Array.from({ length: 8 }, () => Array(5).fill(''));
+      
+      
+
+      
+      savedGrid[currentRow] = [...guessGrid[currentRow]];
+      
+    
+      memory[date] = {
+        ...memory[date],
+        date: todayStr,
+        guesses: savedGrid,
+        complete: gameOver,
+        lastletter:guessGrid[currentRow][4],
+        liesList: liesList,
+        current_mode: mode,
+        answer:answerWord,
+        rowlabels:rowLabels,
+
+      };
+    
+      localStorage.setItem('wordleMemory', JSON.stringify(memory));
+
+    }
+
+    
   }
   
 
@@ -839,9 +981,13 @@ function saveProgress() {
   function generateResultsText(win) {
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
+    const date = urlParams.get('date');
     let result='';
-    if (!mode){
+    if (!mode && !date){
       result = `Scandle - ${win ? currentRow + 1 : 'X'}/8\n\n`;
+    }
+    if (date){
+      result = `Scandle (archive: ${date} word: ${answerWord})- ${win ? currentRow + 1 : 'X'}/8\n\n`;
     }
     if (mode){
       result = `Scandle (mode: ${mode} word: ${answerWord})- ${win ? currentRow + 1 : 'X'}/8\n\n`;
@@ -850,7 +996,7 @@ function saveProgress() {
     
  
     if (currentRow ===8){
-      currentRow-=2;
+      currentRow-=1;
     }
     for (let r = 0; r < currentRow+1; r++) {
       const guess = guessGrid[r].join('');
@@ -891,6 +1037,7 @@ function saveProgress() {
     document.getElementById('results-modal').classList.add('show');
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
+    const date = urlParams.get('date');
     if(mode){
       showTryAgain(show = true);
       
@@ -914,20 +1061,39 @@ function saveProgress() {
   
     // Save results
     const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
-    memory.daily = {
-      ...memory.daily,
-      results: {
-        text: resultText,
-        show: true
-      }
-    };
+    if (!date){
+      memory.daily = {
+        ...memory.daily,
+        results: {
+          text: resultText,
+          show: true
+        }
+      };
+    }else{
+      memory[date] = {
+        ...memory[date],
+        results: {
+          text: resultText,
+          show: true
+        }
+      };
+    }
     localStorage.setItem('wordleMemory', JSON.stringify(memory));
   }
   
   
   function openResults() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const date = urlParams.get('date');
     const memory = JSON.parse(localStorage.getItem('wordleMemory'));
-    const results = memory?.daily?.results;
+    let results;
+    if (!date){
+      results = memory?.daily?.results;
+    }else{
+      results=memory[date]?.results;
+    }
+    
   
     if (results?.text) {
       document.getElementById('results-text').textContent = results.text;
@@ -956,9 +1122,20 @@ function saveProgress() {
   }
   
   function restoreResultsIfNeeded() {
-    const memory = JSON.parse(localStorage.getItem('wordleMemory'));
-    const results = memory?.daily?.results;
-  
+    const urlParams = new URLSearchParams(window.location.search);
+    let results;
+    let memory = JSON.parse(localStorage.getItem('wordleMemory'));
+    const date = urlParams.get('date');
+    const mode = urlParams.get('date');
+    if (!date&&!mode){
+      
+      results = memory?.daily?.results;
+      showTryAgain(show = true)
+    }else if (mode){
+      results = memory?.mode?.results;
+    }else{results=memory[date]?.results}
+    
+    
     if (results?.text) {
       if (gameOver) {
         document.getElementById('results-text').textContent = results.text;
@@ -970,7 +1147,8 @@ function saveProgress() {
   function restoreGuesses() {
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
-    if (!mode){
+    const date = urlParams.get('date');
+    if (!mode && !date){
 
     
       const memory = JSON.parse(localStorage.getItem('wordleMemory'));
@@ -1018,20 +1196,19 @@ function saveProgress() {
       liesList = memory?.mode?.liesList ||[];
       
       
-      console.log(storedGuesses);
-    
+      
       if (storedGuesses && Array.isArray(storedGuesses)) {
         guessGrid = storedGuesses;
      
       
         storedGuesses.forEach((guessArr, rowIndex) => {
           const guess = guessArr.join('');
-          console.log(guessArr);
+          
           
           const result = evaluateGuess(guess,rowIndex); // Use your custom evaluation logic
           
           guessArr.forEach((letter, colIndex) => {
-            console.log(letter,colIndex)
+            
             const cell = document.getElementById(`box-${rowIndex}-${colIndex}`);
             
             if (!guessArr.every(char => char === "")){
@@ -1049,7 +1226,47 @@ function saveProgress() {
     
         currentRow = storedGuesses.findIndex(row => row.join('') === '');
         if (currentRow === -1) currentRow = 8;
-        console.log(currentRow);
+        
+        currentCol = 0;
+    
+        if (complete) {
+          disableInput();
+          document.getElementById('share-trigger').classList.remove('hidden');
+        }
+      }
+
+    }else if (date){
+      const memory = JSON.parse(localStorage.getItem('wordleMemory'));
+      const storedGuesses= memory[date]?.guesses;
+
+      const complete = memory[date]?.complete;
+      lastletter=memory[date]?.lastletter;
+      liesList = memory[date]?.liesList ||[];
+      
+    
+      if (storedGuesses && Array.isArray(storedGuesses)) {
+        guessGrid = storedGuesses;
+        
+        createWordleGrid(answerWord);
+        
+        storedGuesses.forEach((guessArr, rowIndex) => {
+          const guess = guessArr.join('');
+          const result = evaluateGuess(guess,rowIndex); // Use your custom evaluation logic
+      
+          guessArr.forEach((letter, colIndex) => {
+            
+            const cell = document.getElementById(`box-${rowIndex}-${colIndex}`);
+            cell.textContent = letter;
+    
+            if (letter && result[colIndex]) {
+              cell.classList.add(result[colIndex]); // 'correct', 'present', or 'absent'
+            }
+          });
+        });
+    
+    
+        currentRow = storedGuesses.findIndex(row => row.join('') === '');
+        if (currentRow === -1) currentRow = 8;
         currentCol = 0;
     
         if (complete) {
@@ -1105,15 +1322,20 @@ window.onload = async () => {
      
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get('mode');
+  const date = urlParams.get('date');
+  console.log(date);
   if(mode){
-    document.getElementById('game-title').textContent ="Scandle - " + mode;
+    document.getElementById('game-title').textContent ="Scandle -  " + mode;
   }
-  if(!mode){
+  if(date){
+    document.getElementById('game-title').textContent ="Scandle Archive- " + date;
+  }
+  if(!mode && !date){
     document.getElementById('game-title').textContent ="Daily Scandle";
   }
   
 
-  if (!mode) {
+  if (!mode && !date) {
     // Only run this if there is NO ?mode=
     checkNewDay();
     await loadTodayAnswer();
@@ -1125,7 +1347,17 @@ window.onload = async () => {
     await createRandomAnswer();
     restoreGuesses();
     createKeyboard();
+    restoreResultsIfNeeded();
 
+  }
+  if (date){
+    checkNewDay1();
+    await loadTodayAnswer();
+    restoreGuesses();
+    createKeyboard();
+    restoreResultsIfNeeded();
+
+    
   }
 
     
