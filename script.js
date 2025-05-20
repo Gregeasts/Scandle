@@ -1,6 +1,7 @@
 const menuToggle = document.getElementById('menu-toggle');
 const menuClose = document.getElementById('menu-close');
 const sidebar = document.getElementById('sidebar');
+
 let gameOver = false;
 let row1= "";
 let row2= "";
@@ -9,6 +10,8 @@ let row4= "";
 let row5= "";
 let row6= "";
 let row7= "";
+let flashInterval = null; // 🆕 holds the interval so we can clear it later
+
 let row8= "";
 let lastletter ='';
 let liesList=[];
@@ -374,6 +377,10 @@ function createWordleGrid(answer) {
 
         img.src='end.svg';
     }
+    else if (label==='Timer'){
+
+      img.src='bomb.svg';
+    }
     else if (label.startsWith('M')) {
         const letter = label[1]?.toUpperCase() || ''; // Get the letter after 'M'
  
@@ -407,6 +414,9 @@ function createWordleGridRandom(answer) {
   
     if (mode==='Snake'){
       rowLabels = ["Normal", "End", "End", "End", "End", "End","End", "Normal"];
+    }
+    if (mode==='Bomb'){
+      rowLabels = ["Normal", "Timer", "Timer", "Timer", "Timer", "Timer","Timer", "Timer"];
     }
     else if (mode==='Walls'){
       let wallList = [];
@@ -535,6 +545,7 @@ function createWordleGridRandom(answer) {
     const svgContainer = document.createElement('div');
     svgContainer.className = 'svg-box';
     const label = rowLabels[r] || 'Normal';
+    console.log(label)
     const img = document.createElement('img');
     img.className = 'end-rows'; // Add your class name here
     
@@ -558,6 +569,10 @@ function createWordleGridRandom(answer) {
     else if (label==='End'){
 
         img.src='end.svg';
+    }
+    else if (label==='Timer'){
+
+      img.src='bomb.svg';
     }
     else if (label.startsWith('M')) {
         const letter = label[1]?.toUpperCase() || ''; // Get the letter after 'M'
@@ -586,6 +601,7 @@ function evaluateGuess(guess,currentRow) {
   
     const answerArr = answerWord.split('');
     const guessArr = guess.split('');
+    console.log(guess,currentRow);
     if (guessArr.length<1){
         const result1 = ['absent','absent','absent','absent','absent'];
         return result1;
@@ -786,6 +802,14 @@ document.addEventListener('keydown', (e) => {
     }
 
     const result = evaluateGuess(guess,currentRow);
+    if (flashInterval) {
+      const bomb = document.getElementById('bomb-timer');
+      clearInterval(flashInterval);
+      flashInterval = null;
+      bomb.classList.add('hidden');
+    
+      
+    }
     
 
     for (let i = 0; i < 5; i++) {
@@ -818,6 +842,10 @@ document.addEventListener('keydown', (e) => {
     }
     currentRow++;
     currentCol = 0;
+    handleTimer();
+    
+    
+    
     
   }
 });
@@ -832,7 +860,57 @@ function celebrateResult(win) {
     setTimeout(() => body.classList.remove('fail-flash'), 1000);
   }
 }
+function handleTimer(){
+  if (rowLabels[currentRow] === 'Timer') {
+        
+    const bomb = document.getElementById('bomb-timer');
+    const gameContainer = document.getElementById('wordle-grid');
 
+    bomb.classList.remove('hidden');
+
+    flashes = 0;
+    flashInterval = setInterval(() => {
+      // Flash red
+      gameContainer.classList.add('flash-red');
+      gameContainer.classList.add('shake');
+
+      setTimeout(() => {
+        gameContainer.classList.remove('flash-red');
+        gameContainer.classList.remove('shake');
+      }, 200); // remove after short flash/shake
+
+      flashes++;
+
+      if (flashes >= 8) {
+        clearInterval(flashInterval);
+        bomb.classList.add('hidden');
+        console.log("here");
+        guessGrid[currentRow]= ['Z','Z','Z','Z','Z'];
+        const result = evaluateGuess('ZZZZZ',currentRow);
+        for (let i = 0; i < 5; i++) {
+          const box = document.getElementById(`box-${currentRow}-${i}`);
+          box.textContent = 'Z';
+          box.classList.add('filled');
+          box.classList.add(result[i]);
+        }
+        saveProgress(); 
+        currentRow++;
+        currentCol = 0;
+        handleTimer();
+        if (currentRow === 8) {
+          currentRow-=1;
+          celebrateResult(false);
+          setTimeout(() => showResults(false), 2000);
+          disableInput();
+          saveProgress();
+          document.getElementById('share-trigger').style.display = 'block';
+      
+        }
+        
+      }
+    }, 1000);
+  }
+}
 function checkNewDay() {
     const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
     const lastDate = memory?.daily?.date;
@@ -937,6 +1015,7 @@ function saveProgress() {
       const todayStr = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
       const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
       const savedGrid = memory[date]?.guesses || Array.from({ length: 8 }, () => Array(5).fill(''));
+      console.log(savedGrid,[...guessGrid[currentRow]])
       
       
 

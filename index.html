@@ -53,6 +53,14 @@
           <p>Slippery, sloppery, snaking through wordle-opoly!</p>
         </div>
       </a>
+            
+      <a href="#" class="menu-box" data-mode="Bomb">
+        <img src="bomb.svg" alt="Group mode" />
+        <div class="text-content">
+          <h2>Bomb</h2>
+          <p>Beware the flashy red thing, there is not much time!</p>
+        </div>
+      </a>
       
       <a href="#" class="menu-box" data-mode="Lies">
         <img src="lie.svg" alt="Find mode" />
@@ -117,6 +125,13 @@
         </div>
       </div>
       <div class="menu-box">
+        <img src="bomb.svg" alt="Find mode" />
+        <div class="text-content">
+          <h2>Bombs</h2>
+          <p>Beware the exploding red flashy things, there is not much time!</p>
+        </div>
+      </div>
+      <div class="menu-box">
         <img src="block.svg" alt="Find mode" />
         <div class="text-content">
           <h2>Block</h2>
@@ -151,9 +166,15 @@
   <!-- Main game window placeholder -->
   <main id="Title">
     <h1 id="game-title">Daily Scandle</h1>
+    
+    
 
   </main>
   <main id="game-window">
+    
+    <div id="bomb-timer" class="hidden">
+      <img src="bombred.svg" alt="Bomb" id="bomb-image">
+    </div>
     <div id="invalid-popup">Invalid word</div>
     <div id="wordle-grid" class="grid-container"></div>
     <div id="keyboard" class="on-screen-keyboard">
