@@ -1140,9 +1140,18 @@ function saveProgress() {
   
     // Save results
     const memory = JSON.parse(localStorage.getItem('wordleMemory')) || {};
-    if (!date){
+    if (!date && !mode){
       memory.daily = {
         ...memory.daily,
+        results: {
+          text: resultText,
+          show: true
+        }
+      };
+    }
+    else if (mode){
+      memory.mode = {
+        ...memory.mode,
         results: {
           text: resultText,
           show: true
@@ -1165,13 +1174,14 @@ function saveProgress() {
     const urlParams = new URLSearchParams(window.location.search);
 
     const date = urlParams.get('date');
+    const mode = urlParams.get('mode');
     const memory = JSON.parse(localStorage.getItem('wordleMemory'));
     let results;
-    if (!date){
+    if (!date&&!mode){
       results = memory?.daily?.results;
-    }else{
+    }else if (date){
       results=memory[date]?.results;
-    }
+    }else{results=memory?.mode?.results;}
     
   
     if (results?.text) {
@@ -1205,14 +1215,21 @@ function saveProgress() {
     let results;
     let memory = JSON.parse(localStorage.getItem('wordleMemory'));
     const date = urlParams.get('date');
-    const mode = urlParams.get('date');
+    const mode = urlParams.get('mode');
     if (!date&&!mode){
       
       results = memory?.daily?.results;
-      showTryAgain(show = true)
+      showTryAgain(show = false);
     }else if (mode){
+      console.log("here1");
       results = memory?.mode?.results;
-    }else{results=memory[date]?.results}
+      showTryAgain(show = true);
+    }else if (date){
+      console.log("here");
+      results=memory[date]?.results;
+      showTryAgain(show = false);
+    }
+    
     
     
     if (results?.text) {
