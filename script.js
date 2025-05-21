@@ -1063,7 +1063,7 @@ function saveProgress() {
     const date = urlParams.get('date');
     let result='';
     if (!mode && !date){
-      result = `Scandle - ${win ? currentRow + 1 : 'X'}/8\n\n`;
+      result = `Scandle - word: ${answerWord} - ${win ? currentRow + 1 : 'X'}/8\n\n`;
     }
     if (date){
       result = `Scandle (archive: ${date} word: ${answerWord})- ${win ? currentRow + 1 : 'X'}/8\n\n`;
